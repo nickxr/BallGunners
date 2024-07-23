@@ -70,6 +70,7 @@ namespace Player
             _sequence.SetLoops(-1, LoopType.Restart);
         }
         
+        [ServerCallback]
         private void OnTriggerEnter(Collider other)
         {
             Debug.Log($"{other.tag} OnTriggerEnter, isMine{isPlayerGoal}, myTeam {_serverScore.myTeamId}");
@@ -78,7 +79,7 @@ namespace Player
             
             if (_parentInIdentity.isServer)
             {
-                networkBallsSpawner.HandleBallHit(other.gameObject);
+                networkBallsSpawner.DestroyBall(other.gameObject);
             }
         }
 

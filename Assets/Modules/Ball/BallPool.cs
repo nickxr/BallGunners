@@ -4,43 +4,66 @@ using UnityEngine;
 namespace Ball
 {
     public class BallPool : MonoBehaviour
-    {
-        public GameObject ballPrefab;
-        public int initialSize = 10;
+    { 
+        // singleton for easier access from other scripts
+        public static BallPool singleton;
 
+        [Header("Settings")]
+        public GameObject ballPrefab;
         private Queue<GameObject> _pool;
+        public int maxBalls = 5;
+        private int activeBallsCount;
 
         private void Start()
         {
+            singleton = this;
             _pool = new Queue<GameObject>();
-
-            for (int i = 0; i < initialSize; i++)
-            {
-                GameObject ball = Instantiate(ballPrefab);
-                ball.SetActive(false);
-            
-                _pool.Enqueue(ball);
-            }
+            activeBallsCount = 0;
         }
-
-        public GameObject Get()
+        
+        public GameObject Get(Vector3 position, Quaternion rotation)
         {
-            if (_pool.Count > 0)
+            GameObject ball = null;
+
+            // find valid object in pool
+            while (_pool.Count > 0)
             {
-                GameObject ball = _pool.Dequeue();
-                return ball;
+                ball = _pool.Dequeue();
+                if (ball != null)
+                    break;
+            }
+
+            if (ball == null)
+            {
+                if (activeBallsCount < maxBalls)
+                {
+                    ball = Instantiate(ballPrefab, position, rotation);
+                    activeBallsCount++;
+                }
+                else
+                {
+                    Debug.LogWarning("Max ball limit reached. Cannot create more balls.");
+                    return null;
+                }
             }
             else
             {
-                GameObject ball = Instantiate(ballPrefab);
-                return ball;
+                ball.SetActive(true);
+                ball.transform.position = position;
+                ball.transform.rotation = rotation;
             }
+
+            return ball;
         }
 
-        public void Put(GameObject ball)
+        // Used to put object back into pool so they can b
+        public void Return(GameObject ball)
         {
-            ball.SetActive(false);
-            _pool.Enqueue(ball);
+            if (ball != null)
+            {
+                ball.SetActive(false);
+                _pool.Enqueue(ball);
+            }
         }
     }
 }

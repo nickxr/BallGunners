@@ -7,9 +7,6 @@ namespace Network
 {
     public class NetworkBallsSpawner : NetworkBehaviour
     {
-        public BallPool ballPool;
-        public float maxBalls;
-
         private List<GameObject> _activeBalls;
         
         private void Start()
@@ -20,7 +17,23 @@ namespace Network
         [Command]
         public void CmdFire(Vector3 position, Quaternion rotation, Vector3 force)
         {
-            SpawnBallOnServer(position, rotation, force);
+            if (_activeBalls.Count >= BallPool.singleton.maxBalls)
+            {
+                DestroyBall(_activeBalls[0]);
+            }
+
+            GameObject ball = BallPool.singleton.Get(position, rotation);
+            if (ball != null)
+            {
+                ball.GetComponent<BallController>().Launch(force);  // Add force for shooting
+                NetworkServer.Spawn(ball);
+                _activeBalls.Add(ball);
+                RpcSyncBall(ball);
+            }
+            else
+            {
+                Debug.LogWarning("Could not fire ball because max limit has been reached.");
+            }
         }
 
         [ClientRpc]
@@ -28,48 +41,16 @@ namespace Network
         {
             if (isServer)
                 return;
-
-            _activeBalls.Add(ball);
-
-            if (_activeBalls.Count > maxBalls)
-            {
-                GameObject oldestBall = _activeBalls[0];
-                ballPool.Put(oldestBall);
-                _activeBalls.RemoveAt(0);
-            }
-        }
-
-        [Server]
-        private void SpawnBallOnServer(Vector3 position, Quaternion rotation, Vector3 force)
-        {
-            GameObject ball = ballPool.Get();
-            ball.transform.position = position;
-            ball.transform.rotation = rotation;
-            ball.SetActive(true);
-            ball.GetComponent<BallController>().Launch(force);
-
-            NetworkServer.Spawn(ball);
-            _activeBalls.Add(ball);
-
-            if (_activeBalls.Count > maxBalls)
-            {
-                GameObject oldestBall = _activeBalls[0];
-                NetworkServer.UnSpawn(oldestBall);
-            
-                ballPool.Put(oldestBall);
-                _activeBalls.RemoveAt(0);
-            }
-            RpcSyncBall(ball);
         }
         
         [Server]
-        public void HandleBallHit(GameObject ball)
+        public void DestroyBall(GameObject ball)
         {
-            if (_activeBalls.Contains(ball))
+            if (ball != null)
             {
-                _activeBalls.Remove(ball);
                 NetworkServer.UnSpawn(ball);
-                ballPool.Put(ball);
+                BallPool.singleton.Return(ball);
+                _activeBalls.Remove(ball);
             }
         }
     }

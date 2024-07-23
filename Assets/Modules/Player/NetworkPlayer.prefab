@@ -37,7 +37,6 @@ Transform:
   - {fileID: 4273967719943080023}
   - {fileID: 1633337983961126712}
   - {fileID: 1029956982388294515}
-  - {fileID: 7601605223554958014}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3692994927318191
@@ -107,8 +106,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  ballPool: {fileID: 868241034757857304}
-  maxBalls: 10
 --- !u!114 &4941950195149763564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,7 +430,7 @@ MonoBehaviour:
   interpolateRotation: 1
   interpolateScale: 0
   coordinateSpace: 0
-  sendIntervalMultiplier: 1
+  sendIntervalMultiplier: 3
   timelineOffset: 0
   showGizmos: 0
   showOverlay: 0
@@ -454,92 +451,6 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: da353b7a593ee9c4bb5d4c63aaf36ef6,
     type: 3}
   m_PrefabInstance: {fileID: 703015736197342360}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &5030215854318937791
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 5798426773034148553}
-    m_Modifications:
-    - target: {fileID: 2245141045366049083, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_Name
-      value: BallPool
-      objectReference: {fileID: 0}
-    - target: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 89be787bcce5d9b4d9626b1ed08a09e2, type: 3}
---- !u!114 &868241034757857304 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5314940484217407143, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-    type: 3}
-  m_PrefabInstance: {fileID: 5030215854318937791}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc8735a9d8db442588fe7cbdf97b1d6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &7601605223554958014 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3220277169335346177, guid: 89be787bcce5d9b4d9626b1ed08a09e2,
-    type: 3}
-  m_PrefabInstance: {fileID: 5030215854318937791}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8455603872192537805
 PrefabInstance:
@@ -612,7 +523,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1508738342938520392, guid: 0554e741b4ab7314fa3eb0aea66c880c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 110549110845157543}
   m_SourcePrefab: {fileID: 100100000, guid: 0554e741b4ab7314fa3eb0aea66c880c, type: 3}
 --- !u!4 &1633337983961126712 stripped
 Transform:
@@ -632,9 +547,49 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8455603872192537805}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7036957342690742149}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fac3e65f71984ed3b50ce51d77891dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7036957342690742149 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1508738342938520392, guid: 0554e741b4ab7314fa3eb0aea66c880c,
+    type: 3}
+  m_PrefabInstance: {fileID: 8455603872192537805}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &110549110845157543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7036957342690742149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 1633337983961126712}
+  syncPosition: 1
+  syncRotation: 0
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 0
+  interpolatePosition: 1
+  interpolateRotation: 0
+  interpolateScale: 0
+  coordinateSpace: 0
+  sendIntervalMultiplier: 1
+  timelineOffset: 0
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  positionPrecision: 0.01
+  scalePrecision: 0.01
