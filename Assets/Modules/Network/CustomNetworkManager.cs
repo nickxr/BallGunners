@@ -15,6 +15,7 @@ namespace Network
         public override void OnServerAddPlayer(NetworkConnectionToClient conn)
         {
             base.OnServerAddPlayer(conn);
+            //maybe excessive
             NetworkServer.Spawn(conn.identity.gameObject);
             AddPlayer(conn, conn.identity.gameObject);
         }
@@ -50,7 +51,7 @@ namespace Network
             Players.TryAdd(conn, player);
             
             PlayerController playerController = player.GetComponent<PlayerController>();
-            playerController.SetColor(LocalPrefabColor);
+            playerController.SetColor(LocalPrefabColor); //call CmdSetColor on the server
         }
 
         //This logic is probably already written in Mirror

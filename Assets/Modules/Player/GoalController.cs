@@ -41,8 +41,10 @@ namespace Player
             _serverScore.opponentTeamId = _serverScore.myTeamId == 1 ? 0 : 1;
             isPlayerGoal = _parentInIdentity.isLocalPlayer;
             IDInstalledEvent?.Invoke();
-            
-            StartMovement();
+            if (_parentInIdentity.isLocalPlayer)
+            {
+                StartMovement();
+            }
         }
         
         private void StartMovement()

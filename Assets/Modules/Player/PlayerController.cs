@@ -1,15 +1,13 @@
-using System;
 using Mirror;
 using Network;
 using UnityEngine;
-using VContainer;
 
 namespace Player
 {
     public class PlayerController : NetworkBehaviour
     {
         [SerializeField] private PlayerView view;
-        [SyncVar] public Color playerColor;
+        [SyncVar(hook = nameof(OnColorChanged))] public Color playerColor;
         [SerializeField] private GameObject cameraObject;
         
         private void Awake()
@@ -30,15 +28,25 @@ namespace Player
             }
         }
 
+        [Command]
+        public void CmdSetColor(Color color)
+        {
+            playerColor = color; // This will trigger the SyncVar hook on all clients
+        }
+
         public void SetColor(Color color)
         {
             if (isLocalPlayer)
             {
-                playerColor = color;
-                ApplyColor();
+                CmdSetColor(color); // Set color through a Command
             }
         }
 
+        private void OnColorChanged(Color oldColor, Color newColor)
+        {
+            ApplyColor();
+        }
+        
         public override void OnStartClient()
         {
             base.OnStartClient();
