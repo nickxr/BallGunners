@@ -1,105 +1,37 @@
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using Mirror;
-using Player;
 using UI;
 using UnityEngine;
 using VContainer;
 
 namespace Network
 {
-    public class LobbyController : MonoBehaviour
+    public class LobbyController
     {
-        private readonly Dictionary<NetworkConnection, GameObject> _players = new();
-        private readonly Dictionary<NetworkIdentity, Color> _playerColors = new();
-
         private LobbyUI _lobbyUI;
-        private Color _selectedColor;
+        private CustomNetworkManager _networkManager;
 
         [Inject]
-        public void Initialize(LobbyUI lobbyUI)
+        public void Initialize(LobbyUI lobbyUI, CustomNetworkManager networkManager)
         {
             _lobbyUI = lobbyUI;
-            _lobbyUI.SetPlayerColorEvent += SetPlayerColor;
-        
-            Debug.Log("LobbyUI injected successfully: " + (lobbyUI != null));
-        }
-
-        public Color GetColor()
-        {
-            return _selectedColor;
+            _lobbyUI.SetPlayerColorEvent += SetColorFromUI;
+            _networkManager = networkManager;
+            _networkManager.DisconnectedEvent += HandleClientDisconnect;
         }
         
-        private async void JoinGame()
+        private void SetColorFromUI(Color color)
         {
-            if (NetworkManager.singleton)
-            {
-                NetworkManager.singleton.StartClient();
-                Debug.Log("StartingClient");
-                _lobbyUI.UpdateStatus("Joining game...");
-            }
-            else
-            {
-                NetworkManager.singleton.StartHost();
-                Debug.Log("StartingHost");
-                _lobbyUI.UpdateStatus("Hosting game...");
-            }
-        
-            await WaitForClientToConnectAsync();
-            NetworkManager.singleton.ServerChangeScene("Game");
+            _networkManager.SetLocalColor(color);
         }
 
-        private async UniTask WaitForClientToConnectAsync()
-        {
-            while (!NetworkClient.isConnected)
-            {
-                await UniTask.Delay(100);
-            } 
-        }
-
-        private void SetPlayerColor(Color color)
-        {
-            Debug.Log($"SetPlayerColor {color}");
-            _selectedColor = color;
-        }
-
-        public void AddPlayer(NetworkConnection conn, GameObject player)
-        {
-            _players[conn] = player;
-            NetworkIdentity identity = player.GetComponent<NetworkIdentity>();
-
-            _playerColors.TryAdd(identity, _selectedColor);
-
-            if (_playerColors.TryGetValue(identity, out var color))
-            {
-                PlayerController playerController = player.GetComponent<PlayerController>();
-                if (playerController != null)
-                {
-                    playerController.SetColor(color);
-                }
-                else
-                {
-                    Debug.LogError("PlayerController component missing from the GameObject.");
-                }
-            }
-            else
-            {
-                Debug.LogError("Color not found for the player.");
-            }
-        }
-
-        public void RemovePlayer(NetworkConnection conn)
-        {
-            if (_players.ContainsKey(conn))
-            {
-                Destroy(_players[conn]);
-                _players.Remove(conn);
-            }
-        }
-
-        public void HandleClientDisconnect()
+        private void HandleClientDisconnect()
         {
             _lobbyUI.UpdateStatus("Disconnected from server");
+        }
+
+        ~LobbyController()
+        {
+            _lobbyUI.SetPlayerColorEvent -= SetColorFromUI;
+            _networkManager.DisconnectedEvent -= HandleClientDisconnect;
         }
     }
 }

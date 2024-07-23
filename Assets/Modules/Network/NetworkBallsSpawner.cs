@@ -20,17 +20,27 @@ namespace Network
         [Command]
         public void CmdFire(Vector3 position, Quaternion rotation, Vector3 force)
         {
-            RpcFire(position, rotation, force);
+            SpawnBallOnServer(position, rotation, force);
         }
 
         [ClientRpc]
-        private void RpcFire(Vector3 position, Quaternion rotation, Vector3 force)
+        private void RpcSyncBall(GameObject ball)
         {
-            // Создание мяча на всех клиентах
-            SpawnBall(position, rotation, force);
+            if (isServer)
+                return;
+
+            _activeBalls.Add(ball);
+
+            if (_activeBalls.Count > maxBalls)
+            {
+                GameObject oldestBall = _activeBalls[0];
+                ballPool.Put(oldestBall);
+                _activeBalls.RemoveAt(0);
+            }
         }
 
-        private void SpawnBall(Vector3 position, Quaternion rotation, Vector3 force)
+        [Server]
+        private void SpawnBallOnServer(Vector3 position, Quaternion rotation, Vector3 force)
         {
             GameObject ball = ballPool.Get();
             ball.transform.position = position;
@@ -49,6 +59,7 @@ namespace Network
                 ballPool.Put(oldestBall);
                 _activeBalls.RemoveAt(0);
             }
+            RpcSyncBall(ball);
         }
     }
 }

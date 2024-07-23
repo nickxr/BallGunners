@@ -52,6 +52,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65e8a252a19842afaab888656d136441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   connorRenderer: {fileID: 2161737405511497756}
   goalRenderer: {fileID: 5564921629739713076}
 --- !u!114 &8293059674118025108
@@ -70,6 +73,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.032
   view: {fileID: 3692994927318191}
+  playerColor: {r: 1, g: 1, b: 1, a: 0}
   cameraObject: {fileID: 8028701892541915609}
 --- !u!114 &2339623604059492937
 MonoBehaviour:
@@ -122,6 +126,7 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects: []
   goalController: {fileID: 5719522261874596362}
+  playerController: {fileID: 8293059674118025108}
 --- !u!1 &8028701892541915609
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,6 +375,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5731094862116005791}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: da353b7a593ee9c4bb5d4c63aaf36ef6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1393782610535443440}
   m_SourcePrefab: {fileID: 100100000, guid: da353b7a593ee9c4bb5d4c63aaf36ef6, type: 3}
 --- !u!1 &360557108938168777 stripped
 GameObject:
@@ -399,6 +408,41 @@ MonoBehaviour:
   shootPoint: {fileID: 840509323302797411}
   networkBallsSpawner: {fileID: 2263995847996519966}
   isLocalPlayer: 0
+--- !u!114 &1393782610535443440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360557108938168777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a553cb17010b2403e8523b558bffbc14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 1029956982388294515}
+  syncPosition: 0
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 0
+  interpolateRotation: 1
+  interpolateScale: 0
+  coordinateSpace: 0
+  sendIntervalMultiplier: 1
+  timelineOffset: 0
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  bufferResetMultiplier: 3
+  changedDetection: 1
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
 --- !u!4 &1029956982388294515 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: da353b7a593ee9c4bb5d4c63aaf36ef6,

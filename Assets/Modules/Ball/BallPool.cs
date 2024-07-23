@@ -1,43 +1,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallPool : MonoBehaviour
+namespace Ball
 {
-    public GameObject ballPrefab;
-    public int initialSize = 10;
-
-    private Queue<GameObject> _pool;
-
-    void Start()
+    public class BallPool : MonoBehaviour
     {
-        _pool = new Queue<GameObject>();
+        public GameObject ballPrefab;
+        public int initialSize = 10;
 
-        for (int i = 0; i < initialSize; i++)
+        private Queue<GameObject> _pool;
+
+        void Start()
         {
-            GameObject ball = Instantiate(ballPrefab);
-            ball.SetActive(false);
+            _pool = new Queue<GameObject>();
+
+            for (int i = 0; i < initialSize; i++)
+            {
+                GameObject ball = Instantiate(ballPrefab);
+                ball.SetActive(false);
             
+                _pool.Enqueue(ball);
+            }
+        }
+
+        public GameObject Get()
+        {
+            if (_pool.Count > 0)
+            {
+                GameObject ball = _pool.Dequeue();
+                return ball;
+            }
+            else
+            {
+                GameObject ball = Instantiate(ballPrefab);
+                return ball;
+            }
+        }
+
+        public void Put(GameObject ball)
+        {
+            ball.SetActive(false);
             _pool.Enqueue(ball);
         }
-    }
-
-    public GameObject Get()
-    {
-        if (_pool.Count > 0)
-        {
-            GameObject ball = _pool.Dequeue();
-            return ball;
-        }
-        else
-        {
-            GameObject ball = Instantiate(ballPrefab);
-            return ball;
-        }
-    }
-
-    public void Put(GameObject ball)
-    {
-        ball.SetActive(false);
-        _pool.Enqueue(ball);
     }
 }

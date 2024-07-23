@@ -1,15 +1,17 @@
 using System;
 using Mirror;
+using Network;
 using UnityEngine;
+using VContainer;
 
 namespace Player
 {
     public class PlayerController : NetworkBehaviour
     {
         [SerializeField] private PlayerView view;
-        [SyncVar] private Color _playerColor;
+        [SyncVar] public Color playerColor;
         [SerializeField] private GameObject cameraObject;
-
+        
         private void Awake()
         {
             cameraObject ??= GetComponentInChildren<Camera>().gameObject;
@@ -21,12 +23,21 @@ namespace Player
             {
                 cameraObject.SetActive(false);
             }
+
+            if (isLocalPlayer && isClientOnly)
+            {
+                CustomNetworkManager.AddPlayer(connectionToServer, gameObject);
+            }
         }
 
         public void SetColor(Color color)
         {
-            _playerColor = color;
-            ApplyColor();
+            Debug.Log($"PC SetColor: {color} isLocal: {isLocalPlayer}");
+            if (isLocalPlayer)
+            {
+                playerColor = color;
+                ApplyColor();
+            }
         }
 
         public override void OnStartClient()
@@ -37,9 +48,11 @@ namespace Player
 
         private void ApplyColor()
         {
+            Debug.Log($"PC ApplyColor {playerColor}, local: {isLocalPlayer}");
+
             if (view != null)
             {
-                view.SetColor(_playerColor);
+                view.SetColor(playerColor);
             }
             else
             {
