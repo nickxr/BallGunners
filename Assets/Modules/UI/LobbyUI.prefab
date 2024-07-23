@@ -1184,7 +1184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6301d9769b9184e82fb0641e68bc65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  joinButton: {fileID: 0}
   colorDropdown: {fileID: 9007986718638991230}
   statusText: {fileID: 8876325082104512585}
 --- !u!1 &6308814428919593743

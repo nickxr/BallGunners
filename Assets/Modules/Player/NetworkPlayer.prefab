@@ -554,6 +554,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Goal
       objectReference: {fileID: 0}
+    - target: {fileID: 4181457965763362503, guid: 0554e741b4ab7314fa3eb0aea66c880c,
+        type: 3}
+      propertyPath: networkBallsSpawner
+      value: 
+      objectReference: {fileID: 2263995847996519966}
     - target: {fileID: 7201993379290543093, guid: 0554e741b4ab7314fa3eb0aea66c880c,
         type: 3}
       propertyPath: m_LocalPosition.x

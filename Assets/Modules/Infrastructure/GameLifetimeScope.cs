@@ -8,10 +8,10 @@ namespace Infrastructure
     public class GameLifetimeScope : LifetimeScope
     {
         [SerializeField] private ScoreUI scoreUI;
-        
+        [SerializeField] private ServerScore serverScore;
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<ScoreManager>(Lifetime.Singleton);
+            builder.RegisterComponent(serverScore);
             builder.RegisterComponent(scoreUI);
         }
     }

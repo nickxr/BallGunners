@@ -33,25 +33,27 @@ namespace Network
         
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
+            Debug.Log("OnServerDisconnect");
             base.OnServerDisconnect(conn);
             RemovePlayer(conn);
         }
 
         public override void OnClientDisconnect()
         {
+            Debug.Log("OnClientDisconnect");
             base.OnClientDisconnect();
             DisconnectedEvent?.Invoke();
         }
 
         public static void AddPlayer(NetworkConnection conn, GameObject player)
         {
-            Debug.Log("LobbyController AddPlayer");
             Players.TryAdd(conn, player);
             
             PlayerController playerController = player.GetComponent<PlayerController>();
             playerController.SetColor(LocalPrefabColor);
         }
 
+        //This logic is probably already written in Mirror
         private void RemovePlayer(NetworkConnection conn)
         {
             if (Players.ContainsKey(conn))

@@ -14,7 +14,11 @@ namespace UI
         private void Awake()
         {
             colorDropdown.onValueChanged.AddListener(OnColorChanged);
-            colorDropdown.value = 0;
+        }
+        
+        private void Start()
+        {
+            colorDropdown.onValueChanged.Invoke(0); 
         }
 
         private void OnColorChanged(int index)

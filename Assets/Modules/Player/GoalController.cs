@@ -1,5 +1,7 @@
+using System;
 using DG.Tweening;
 using Mirror;
+using Network;
 using Scores;
 using UnityEngine;
 using VContainer;
@@ -8,85 +10,89 @@ namespace Player
 {
     public class GoalController : MonoBehaviour
     {
-        public float minZ = -10f; // Минимальная позиция по оси Z
-        public float maxZ = 10f;  // Максимальная позиция по оси Z
-        public float moveDuration = 2f; // Время, необходимое для перемещения от minZ до maxZ
+        public float minZ = -10f; 
+        public float maxZ = 10f;  
+        public float moveDuration = 2f;
 
         private Sequence _sequence;
-        
+
+        [SerializeField] private NetworkBallsSpawner networkBallsSpawner;
+
         public bool isPlayerGoal = true;
-        private ScoreManager _scoreManager;
+        private ServerScore _serverScore;
+        private NetworkIdentity _parentInIdentity;
+        public event Action IDInstalledEvent;
 
         [Inject]
-        public void Construct(ScoreManager scoreManager)
+        public void Construct(ServerScore serverScore)
         {
             Debug.Log("GoalController Construct");
-            _scoreManager = scoreManager;
+            _serverScore = serverScore;
+            IDInstalledEvent += _serverScore.OnInstallIID;
         }
         
         private void Start()
         {
-            isPlayerGoal = transform.root.GetComponent<NetworkIdentity>().isLocalPlayer;
-            // Запускаем анимацию перемещения
+            Transform root = transform.root;
+            networkBallsSpawner ??= root.GetComponent<NetworkBallsSpawner>();
+            
+            _parentInIdentity = root.GetComponent<NetworkIdentity>();
+            _serverScore.myTeamId = _parentInIdentity.isClientOnly ? 1 : 0;
+            _serverScore.opponentTeamId = _serverScore.myTeamId == 1 ? 0 : 1;
+            isPlayerGoal = _parentInIdentity.isLocalPlayer;
+            IDInstalledEvent?.Invoke();
+            
             StartMovement();
         }
-
+        
         private void StartMovement()
         {
-            // Создаем последовательность для анимации
             _sequence = DOTween.Sequence();
 
-            // Определяем начальную и конечную позиции
             Vector3 startPosition = new Vector3(transform.position.x, transform.position.y, minZ);
-            Vector3 endPosition = new Vector3(transform.position.x, transform.position.y, maxZ);
 
-            // Устанавливаем начальное положение объекта
             transform.position = startPosition;
 
-            // Перемещение объекта от minZ до maxZ
+            // Move from minZ to maxZ
             _sequence.Append(transform.DOMoveZ(maxZ, moveDuration)
                 .SetEase(Ease.Linear));
 
-            // Пауза перед обратным движением
+            // Pause
             _sequence.AppendInterval(0.5f);
-
-            // Перемещение объекта от maxZ до minZ
+            
+            //Go back
             _sequence.Append(transform.DOMoveZ(minZ, moveDuration)
                 .SetEase(Ease.Linear));
 
-            // Пауза перед следующим циклом
             _sequence.AppendInterval(0.5f);
 
-            // Повторяем анимацию бесконечно
+            // always restart
             _sequence.SetLoops(-1, LoopType.Restart);
         }
-
         
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log($"OnTriggerEnter: {other.gameObject.name}");
-
-            if (other.CompareTag("Ball"))
+            Debug.Log($"{other.tag} OnTriggerEnter, isMine{isPlayerGoal}, myTeam {_serverScore.myTeamId}");
+            if (!other.CompareTag("Ball")) return;
+            _serverScore.AddScore(!isPlayerGoal ? _serverScore.myTeamId : _serverScore.opponentTeamId);
+            
+            if (_parentInIdentity.isServer)
             {
-                if (isPlayerGoal)
-                {
-                    _scoreManager.SubtractScore(true);  // Уменьшение счета игрока
-                }
-                else
-                {
-                    _scoreManager.AddScore(true);  // Увеличение счета игрока
-                }
-
-                Destroy(other.gameObject);  // Удалить мяч
+                networkBallsSpawner.HandleBallHit(other.gameObject);
             }
         }
 
         private void OnDestroy()
         {
-            // Останавливаем все анимации, связанные с этим объектом
+            // Stop all tween animations
             if (_sequence != null)
             {
                 _sequence.Kill();
+            }
+
+            if (_serverScore != null)
+            {
+                IDInstalledEvent -= _serverScore.OnInstallIID;
             }
         }
     }

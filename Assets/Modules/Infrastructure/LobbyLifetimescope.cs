@@ -11,7 +11,6 @@ namespace Infrastructure
         [SerializeField] private LobbyUI lobbyUIPrefab;
         protected override void Configure(IContainerBuilder builder)
         {
-            Debug.Log("LobbyInstaller started");
             LobbyUI lobbyUI = Instantiate(lobbyUIPrefab);
             builder.RegisterComponent(lobbyUI);
             builder.Register<LobbyController>(Lifetime.Singleton);

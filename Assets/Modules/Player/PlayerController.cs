@@ -32,7 +32,6 @@ namespace Player
 
         public void SetColor(Color color)
         {
-            Debug.Log($"PC SetColor: {color} isLocal: {isLocalPlayer}");
             if (isLocalPlayer)
             {
                 playerColor = color;
@@ -48,8 +47,6 @@ namespace Player
 
         private void ApplyColor()
         {
-            Debug.Log($"PC ApplyColor {playerColor}, local: {isLocalPlayer}");
-
             if (view != null)
             {
                 view.SetColor(playerColor);

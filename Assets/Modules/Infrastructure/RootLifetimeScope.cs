@@ -1,5 +1,4 @@
 using Network;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -11,7 +10,6 @@ namespace Infrastructure
 
         protected override void Configure(IContainerBuilder builder)
         {
-            Debug.Log("RootInstaller started");
             CustomNetworkManager networkManager = Instantiate(networkManagerPrefab);
             networkManager.dontDestroyOnLoad = true;
             builder.RegisterInstance(networkManager);

@@ -10,7 +10,7 @@ namespace Ball
 
         private Queue<GameObject> _pool;
 
-        void Start()
+        private void Start()
         {
             _pool = new Queue<GameObject>();
 

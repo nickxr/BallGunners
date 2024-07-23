@@ -5,10 +5,9 @@ namespace Ball
     public class BallView : MonoBehaviour
     {
         [SerializeField] private Rigidbody rb;
-
         [SerializeField] private PhysicMaterial physMat;
 
-        void Awake()
+        private void Awake()
         {
             if (rb == null) TryGetComponent(out rb);
             if (physMat == null)
@@ -17,11 +16,7 @@ namespace Ball
                 physMat = col.material;
             }
         }
-
-        public void Initialize()
-        {
-        }
-
+        
         public void SetPhysicsProperties(float mass, float drag, float bounce)
         {
             rb.mass = mass;

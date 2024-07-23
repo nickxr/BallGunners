@@ -9,29 +9,54 @@ namespace Scores
         public TextMeshProUGUI playerScoreText;
         public TextMeshProUGUI opponentScoreText;
 
-        private ScoreManager _scoreManager;
+        private ServerScore _serverScore;
 
         [Inject]
-        private void Construct(ScoreManager scoreManager)
+        private void Construct(ServerScore serverScore)
         {
-            Debug.Log("ScoreUI Construct");
-            _scoreManager = scoreManager;
+            _serverScore = serverScore;
+            _serverScore.IDInstalledEvent += Initialize;
         }
-        
-        private void Start()
+
+        private void Initialize()
         {
-            _scoreManager.AddPlayerScoreEvent += UpdateScoreDisplay;
+            Debug.Log($"_serverScore.myTeamId {_serverScore.myTeamId}");
+            if (_serverScore.myTeamId == 1)
+            {
+                _serverScore.UpdateTeam0ScoreUI += UpdateOpponentScore;
+                _serverScore.UpdateTeam1ScoreUI += UpdatePlayerScore;
+            }
+            else
+            {
+                _serverScore.UpdateTeam0ScoreUI += UpdatePlayerScore;
+                _serverScore.UpdateTeam1ScoreUI += UpdateOpponentScore;
+            }
         }
-        
-        private void UpdateScoreDisplay()
+
+        private void UpdatePlayerScore(int newValue)
         {
-            playerScoreText.text = _scoreManager.GetPlayerScore().ToString();
-            opponentScoreText.text = _scoreManager.GetOpponentScore().ToString();
+            playerScoreText.text = newValue.ToString();
+        }
+        private void UpdateOpponentScore(int newValue)
+        {
+            opponentScoreText.text = newValue.ToString();
         }
 
         private void OnDestroy()
         {
-            _scoreManager.AddPlayerScoreEvent -= UpdateScoreDisplay;
+            if (_serverScore == null) return;
+            _serverScore.IDInstalledEvent -= Initialize;
+
+            if (_serverScore.myTeamId == 1)
+            {
+                _serverScore.UpdateTeam0ScoreUI -= UpdateOpponentScore;
+                _serverScore.UpdateTeam1ScoreUI -= UpdatePlayerScore;
+            }
+            else
+            {
+                _serverScore.UpdateTeam0ScoreUI -= UpdatePlayerScore;
+                _serverScore.UpdateTeam1ScoreUI -= UpdateOpponentScore;
+            }
         }
     }
 }

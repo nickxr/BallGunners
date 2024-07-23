@@ -61,5 +61,16 @@ namespace Network
             }
             RpcSyncBall(ball);
         }
+        
+        [Server]
+        public void HandleBallHit(GameObject ball)
+        {
+            if (_activeBalls.Contains(ball))
+            {
+                _activeBalls.Remove(ball);
+                NetworkServer.UnSpawn(ball);
+                ballPool.Put(ball);
+            }
+        }
     }
 }
