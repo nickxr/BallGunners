@@ -1,28 +1,20 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI
 {
     public class LobbyUI : MonoBehaviour
-    {
-        [SerializeField] private Button joinButton;
+    { 
         [SerializeField] private TMP_Dropdown colorDropdown;
         [SerializeField] private TextMeshProUGUI statusText;
 
-        public event Action JoinGameEvent;
         public event Action<Color> SetPlayerColorEvent;
 
         private void Awake()
         {
-            joinButton.onClick.AddListener(OnJoinButtonClicked);
             colorDropdown.onValueChanged.AddListener(OnColorChanged);
-        }
-
-        private void OnJoinButtonClicked()
-        {
-            JoinGameEvent?.Invoke();
+            colorDropdown.value = 0;
         }
 
         private void OnColorChanged(int index)

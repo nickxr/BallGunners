@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6179093931966306524}
   - component: {fileID: 2115069631995961879}
   - component: {fileID: 1994346318602462648}
-  - component: {fileID: -3434326234481972992}
+  - component: {fileID: -4514542813140193674}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -54,7 +54,7 @@ MonoBehaviour:
   autoStartServerBuild: 0
   autoConnectClientBuild: 0
   offlineScene: 
-  onlineScene: 
+  onlineScene: Assets/Scenes/Game.unity
   transport: {fileID: 1994346318602462648}
   networkAddress: localhost
   maxConnections: 4
@@ -63,7 +63,7 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 2766054704460546309, guid: 1fb168209953f6d44a51a711ea5a3eab,
     type: 3}
-  autoCreatePlayer: 0
+  autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 9135129712034040539, guid: 6bf5ea37236b41f449aba61feb621c00, type: 3}
@@ -106,7 +106,7 @@ MonoBehaviour:
   clientMaxReceivesPerTick: 1000
   clientSendQueueLimit: 10000
   clientReceiveQueueLimit: 10000
---- !u!114 &-3434326234481972992
+--- !u!114 &-4514542813140193674
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

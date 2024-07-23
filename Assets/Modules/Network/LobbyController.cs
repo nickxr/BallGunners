@@ -20,7 +20,6 @@ namespace Network
         public void Initialize(LobbyUI lobbyUI)
         {
             _lobbyUI = lobbyUI;
-            _lobbyUI.JoinGameEvent += JoinGame;
             _lobbyUI.SetPlayerColorEvent += SetPlayerColor;
         
             Debug.Log("LobbyUI injected successfully: " + (lobbyUI != null));
@@ -33,13 +32,13 @@ namespace Network
         
         private async void JoinGame()
         {
-            if (NetworkClient.active && !NetworkClient.isConnected)
+            if (NetworkManager.singleton)
             {
                 NetworkManager.singleton.StartClient();
                 Debug.Log("StartingClient");
                 _lobbyUI.UpdateStatus("Joining game...");
             }
-            else if (!NetworkClient.active)
+            else
             {
                 NetworkManager.singleton.StartHost();
                 Debug.Log("StartingHost");

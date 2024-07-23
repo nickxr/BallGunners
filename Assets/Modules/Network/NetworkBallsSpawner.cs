@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Network
 {
-    public class NetworkGameManager : NetworkBehaviour
+    public class NetworkBallsSpawner : NetworkBehaviour
     {
         public BallPool ballPool;
         public float maxBalls;

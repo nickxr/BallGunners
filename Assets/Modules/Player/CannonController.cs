@@ -16,7 +16,7 @@ namespace Player
         public float maxForce = 50f; // Максимальная сила выстрела
 
         public Transform shootPoint;        // Точка, из которой будет стреляться мяч
-        public NetworkGameManager networkGameManager;
+        public NetworkBallsSpawner networkBallsSpawner;
         
         [SerializeField] private bool isLocalPlayer;
 
@@ -32,7 +32,7 @@ namespace Player
             // Проверка, является ли этот объект локальным игроком
             isLocalPlayer = transform.root.GetComponent<NetworkIdentity>().isLocalPlayer;
             
-            if (networkGameManager == null)
+            if (networkBallsSpawner == null)
             {
                 Debug.LogError("NetworkGameManager not found in the scene.");
             }
@@ -80,10 +80,10 @@ namespace Player
 
         private void Fire(float force)
         {
-            if (networkGameManager != null)
+            if (networkBallsSpawner != null)
             {
                 // Вызов метода на сервере для спауна мяча
-                networkGameManager.CmdFire(shootPoint.position, shootPoint.rotation, shootPoint.forward * force);
+                networkBallsSpawner.CmdFire(shootPoint.position, shootPoint.rotation, shootPoint.forward * force);
             }
         }
         

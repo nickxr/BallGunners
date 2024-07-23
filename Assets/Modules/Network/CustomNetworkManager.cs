@@ -16,7 +16,8 @@ namespace Network
         public override void OnServerAddPlayer(NetworkConnectionToClient conn)
         {
             base.OnServerAddPlayer(conn);
-            Debug.Log("Player added.");
+            NetworkServer.Spawn(conn.identity.gameObject);
+            _lobbyController.AddPlayer(conn, conn.identity.gameObject);
         }
         
         public override void OnServerSceneChanged(string sceneName)
@@ -30,7 +31,6 @@ namespace Network
                     GameObject player = Instantiate(playerPrefab);
                     NetworkServer.AddPlayerForConnection(conn, player);
                     NetworkServer.Spawn(player);
-                    _lobbyController.AddPlayer(conn, player);
                 }
             }
         }
